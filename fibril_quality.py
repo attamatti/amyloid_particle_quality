@@ -217,11 +217,8 @@ def make_plots(raps,ps2d,fact1,fact2,yint,pxsize,imagedata):
     print('fit = {}'.format(eq))
     y = eval(eq)
     plt.plot(x,y,color='red',alpha=0.4)
-    #scatterpoints = [calc_dist(ps2d,pxsize,4.7),calc_dist(ps2d,pxsize,4.9)]
-    #vals = [(fact1*(scatterpoints[(0)]**2))+(fact2*scatterpoints[(0)])+yint,fact1*scatterpoints[(1)]**2+fact2*scatterpoints[(1)]+yint]
     plt.axvline(x=calc_dist(ps2d,pxsize,4.7),c='green', alpha=0.3)
     plt.axvline(x=calc_dist(ps2d,pxsize,4.9),c='green', alpha=0.3)
-    #plt.scatter(scatterpoints,vals,color='red',alpha=0.4)
     
     fr2 = plt.subplot2grid((2,3), (1, 2))
 
@@ -257,7 +254,8 @@ def do_it(image,pixelsize):
     mean_dif = compare_vals(PS,rotavg_PS,pixelsize,fit)
     # calculate the expected values for 4.9 - 4.6 A
     plot.suptitle('score = {0}'.format(mean_dif))
-    plot.savefig('fibril_quality_data/{0}_FQ.png'.format(imout.split('.')[0]))
+    if dontwriteimgs == False:
+        plot.savefig('fibril_quality_data/{0}_FQ.png'.format(imout.split('.')[0]))
     plot.close()
     return(mean_dif) 
 
@@ -267,12 +265,17 @@ print("""
 Fibril Quality Assessment v{0}
 -=-=-=--=-=-=-=-=-=-=-=-=-=-=-=""".format(vers))
 # setuop
-if os.path.isdir('fibril_quality_data') == False:
-    os.system('mkdir fibril_quality_data')
+
 
 stack = make_arg('--stack',False,False)
 imagesearch = make_arg('--i',True,True)
 pixelsize = float(make_arg('--apix',True,True))
+dontwriteimgs = make_arg('--noimages',False,False)
+
+if dontwriteimgs == False:
+    if os.path.isdir('fibril_quality_data') == False:
+        os.system('mkdir fibril_quality_data')
+
 if pixelsize > 1.6:
     sys.exit('ERROR: Pixel size must be less than 1.6 A/px to resolve ice diffraction spots.\nERROR: Specified A/px == {0} '.format(pixelsize))
 if imagesearch.split('.')[-1] in ['mrc','mrcs']:
