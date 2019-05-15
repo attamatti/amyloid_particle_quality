@@ -221,7 +221,7 @@ def make_plots(raps,ps2d,fact1,fact2,yint,pxsize,imagedata):
     #print('fit = {}'.format(eq))
     y = eval(eq)
     plt.plot(x,y,color='red',alpha=0.4)
-    plt.axvline(x=calc_dist(ps2d,pxsize,4.7),c='green', alpha=0.3)
+    plt.axvline(x=calc_dist(ps2d,pxsize,4.6),c='green', alpha=0.3)
     plt.axvline(x=calc_dist(ps2d,pxsize,4.9),c='green', alpha=0.3)
     
     fr2 = plt.subplot2grid((2,3), (1, 2))
