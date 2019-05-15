@@ -16,6 +16,10 @@ import numpy as np
 import struct
 from numpy import *
 
+# scipy is triggering a future warning
+import warnings
+warnings.filterwarnings("ignore")
+
 vers = '0.1'
 
 # for troubleshooting arrays
@@ -55,11 +59,11 @@ def read(self):
     elif stack == True:
         input_image_dimension=(self.dim[(2)],self.dim[(1)],self.dim[(0)])  #3D images assumed
         self.image_data=fromfile(file=input_image,dtype=imtype,count=self.dim[(0)]*self.dim[(1)]*self.dim[(2)]).reshape(input_image_dimension)
-        print('dimensions: {0} x {1} x {2}'.format(self.dim[(1)],self.dim[(0)],self.dim[(2)]))
+        #print('dimensions: {0} x {1} x {2}'.format(self.dim[(1)],self.dim[(0)],self.dim[(2)]))
         imgs_dic[self.filename] = self.dim[(2)]
         return(np.mean(self.image_data,axis=0))
     input_image.close()
-    print('dimensions: {0} x {1} x {2}'.format(self.dim[(1)],self.dim[(0)],self.dim[(2)]))
+    #print('dimensions: {0} x {1} x {2}'.format(self.dim[(1)],self.dim[(0)],self.dim[(2)]))
     return(self.image_data)
 #---------------------------
 
@@ -111,7 +115,7 @@ def make_arg(flag, value, req):
 
 
 def azimuthalAverage(image, center=None):
-    print('calculating rotationally avgeraged 1D PS')
+    #print('calculating rotationally avgeraged 1D PS')
     # Calculate the indices from the image
     y, x = np.indices(image.shape)
 
@@ -142,7 +146,7 @@ def azimuthalAverage(image, center=None):
     return radial_prof
 
 def get_PS(image_in):
-    print('calculating FFT and PS')
+    #print('calculating FFT and PS')
     mrcim = mrc_image(image_in)
     image = read(mrcim)
     #image = plt.imread(image_in)           # for reading from tiffs instead of mrcs
@@ -197,7 +201,7 @@ def make_plots(raps,ps2d,fact1,fact2,yint,pxsize,imagedata):
     xmax = int(round(calc_dist(ps2d,pxsize,2.8),0))
     x = np.arange(xmin,xmax)
     eq = '{0}*x**2+{1}*x+{2}'.format(fact1,fact2,yint)
-    print('fit = {}'.format(eq))
+    #print('fit = {}'.format(eq))
     y = eval(eq)
     plt.plot(x,y,color='red',alpha=0.8)
     scatterpoints = [calc_dist(ps2d,pxsize,4.6),calc_dist(ps2d,pxsize,4.9)]
@@ -214,7 +218,7 @@ def make_plots(raps,ps2d,fact1,fact2,yint,pxsize,imagedata):
     xmax = int(round(calc_dist(ps2d,pxsize,2.8),0))
     x = np.arange(xmin,xmax)
     eq = '{0}*x**2+{1}*x+{2}'.format(fact1,fact2,yint)
-    print('fit = {}'.format(eq))
+    #print('fit = {}'.format(eq))
     y = eval(eq)
     plt.plot(x,y,color='red',alpha=0.4)
     plt.axvline(x=calc_dist(ps2d,pxsize,4.7),c='green', alpha=0.3)
@@ -260,11 +264,11 @@ def do_it(image,pixelsize):
     return(mean_dif) 
 
 ### DO IT
-print("""
--=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
-Fibril Quality Assessment v{0}
--=-=-=--=-=-=-=-=-=-=-=-=-=-=-=""".format(vers))
-# setuop
+#print("""
+#-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
+#Fibril Quality Assessment v{0}
+#-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=""".format(vers))
+## setuop
 
 
 stack = make_arg('--stack',False,False)
@@ -284,9 +288,13 @@ else:
     images = glob.glob('{0}*.mrc'.format(imagesearch))
 imgs_dic = {}
 means = {}
+n=0
 for i in images:
-    print i
     means[i]=do_it(i,pixelsize)
+    n+=1
+    if n%10 == 0:
+        sys.stdout.write('.')
+        sys.stdout.flush()
 # write output
 output = open('FQ_find.log','a')
 scoresdic = {}
