@@ -3,6 +3,8 @@
 import subprocess
 import sys
 import glob
+import matplotlib.pyplot as plt
+
 
 # get the files
 try:
@@ -29,3 +31,12 @@ for i in files:
         if n%10 == 0:
             sys.stdout.write('.')
             sys.stdout.flush()
+
+# make the final histogram
+nums = []
+for i in open('FQ_find.log','r').readlines():
+    nums.append(float(i.split()[-1]))
+print('{0} total particles analysed'.format(len(nums)))
+plt.hist(nums)
+plt.savefig('FQ_histo.png')
+    
