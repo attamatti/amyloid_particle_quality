@@ -48,7 +48,9 @@ output = open('FQfilt.star','w')
 output.write(header[0])
 for i in header[1:]:
     output.write('\n{0}'.format(i))
-
+partcount = 0 
 for i in data:
     if i[labels['_rlnImageName ']] in partlist:
         output.write('\n{0}'.format('   '.join(i)))
+        partcount +=1
+print('{0} particles'.format(partcount))

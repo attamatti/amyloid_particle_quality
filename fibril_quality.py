@@ -297,26 +297,7 @@ for i in images:
         sys.stdout.flush()
 # write output
 output = open('FQ_find.log','a')
-scoresdic = {}
 for i in means:
-    scoresdic[i] = means[i]
-    output.write('{0}\t{1}\n'.format(i.split('/')[-1],means[i]))
+    output.write('{0}\t{1}\n'.format(i,means[i]))
 output.close()
 
-#    #make an overall plot:
-#if len(images) > 1:
-#    if stack == True:
-#        plt.subplot(211)
-#    plt.hist(means.values(), bins=np.arange(min(means.values()), max(means.values()) + 0.01, 0.01), facecolor='green')
-#    plt.ylabel('micrographs')
-#    plt.xlabel('x_ice score')
-#    if stack == True:
-#        partvals = []
-#        for i in scoresdic:
-#            for instance in range(imgs_dic[i]):
-#                partvals.append(scoresdic[i])
-#        plt.subplot(212)
-#        plt.hist(partvals, bins=np.arange(min(partvals), max(partvals) + 0.01, 0.01), facecolor='red')
-#        plt.ylabel('particles')
-#        plt.xlabel('x_ice score')
-#    plt.savefig('FQ_results.png')
