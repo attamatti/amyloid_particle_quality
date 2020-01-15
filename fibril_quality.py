@@ -280,8 +280,8 @@ if dontwriteimgs == False:
     if os.path.isdir('fibril_quality_data') == False:
         os.system('mkdir fibril_quality_data')
 
-if pixelsize > 1.6:
-    sys.exit('ERROR: Pixel size must be less than 1.6 A/px to resolve ice diffraction spots.\nERROR: Specified A/px == {0} '.format(pixelsize))
+if pixelsize > 2.0:
+    sys.exit('ERROR: Pixel size must be less than 2.0 A/px to resolve cross-beta layerlines.\nERROR: Specified A/px == {0} '.format(pixelsize))
 if imagesearch.split('.')[-1] in ['mrc','mrcs']:
     images = [imagesearch]
 else:
